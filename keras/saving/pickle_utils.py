@@ -15,10 +15,11 @@
 """Saving utilities to support Python's Pickle protocol."""
 import os
 import tempfile
+import keras.models
 
 import tensorflow.compat.v2 as tf
 
-from keras.saving import saving_lib
+# from keras.saving import saving_lib
 
 
 def deserialize_model_from_bytecode(serialized_model):
@@ -43,7 +44,11 @@ def deserialize_model_from_bytecode(serialized_model):
         # Some custom objects (e.g. an activation in a Dense layer,
         # serialized as a string by Dense.get_config()) will require
         # a custom_object_scope.
-        model = saving_lib.load_model(filepath, safe_mode=False)
+
+        #Change
+        # model = saving_lib.load_model(filepath, safe_mode=False)
+        model = keras.models.load_model(filepath)
+
     except Exception as e:
         raise e
     else:
@@ -66,7 +71,11 @@ def serialize_model_as_bytecode(model):
     temp_dir = tempfile.mkdtemp()
     try:
         filepath = os.path.join(temp_dir, "model.keras")
-        saving_lib.save_model(model, filepath)
+
+        #Change
+        # saving_lib.save_model(model, filepath)
+        keras.models.save_model(model, filepath)
+
         with open(filepath, "rb") as f:
             data = f.read()
     except Exception as e:
